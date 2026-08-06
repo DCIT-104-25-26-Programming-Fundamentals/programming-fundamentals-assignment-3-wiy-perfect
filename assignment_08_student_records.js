@@ -85,3 +85,151 @@
 // =============================================================================
 
 
+const readlineSync = require('readline-sync');
+
+// Global state array holding student objects
+let students = [];
+
+// Helper function to calculate the average of an array of scores
+function calculateAverage(scoresArr) {
+    if (scoresArr.length === 0) return 0;
+    let sum = 0;
+    for (let i = 0; i < scoresArr.length; i++) {
+        sum += scoresArr[i];
+    }
+    return sum / scoresArr.length;
+}
+
+// 1. Add a Student
+function addStudent() {
+    const name = readlineSync.question("Student name: ").trim();
+    if (name === "") {
+        console.log("Error: Name cannot be blank.");
+        return;
+    }
+
+    const id = readlineSync.questionInt("Student ID: ");
+    
+    // Check for ID duplication to maintain database integrity
+    for (let i = 0; i < students.length; i++) {
+        if (students[i].id === id) {
+            console.log(`Error: A student with ID ${id} already exists.`);
+            return;
+        }
+    }
+
+    const scoreCount = readlineSync.questionInt("How many scores? ");
+    if (scoreCount < 0) {
+        console.log("Error: Score count cannot be negative.");
+        return;
+    }
+
+    let scores = [];
+    for (let i = 0; i < scoreCount; i++) {
+        const score = readlineSync.questionInt(`Enter score ${i + 1}: `);
+        scores.push(score);
+    }
+
+    // Construct student record object
+    const newStudent = {
+        name: name,
+        id: id,
+        scores: scores
+    };
+
+    students.push(newStudent);
+    console.log(`Student "${name}" added successfully.`);
+}
+
+// 2. Display All Students
+function displayAllStudents() {
+    if (students.length === 0) {
+        console.log("No student records found.");
+        return;
+    }
+
+    console.log("\n------------------------------------------------------------------");
+    console.log("ID         | Name                | Scores          | Average");
+    console.log("------------------------------------------------------------------");
+    
+    for (let i = 0; i < students.length; i++) {
+        const student = students[i];
+        const avg = calculateAverage(student.scores).toFixed(2);
+        
+        // Pad fields to create structured column alignments
+        const padId = student.id.toString().padEnd(10);
+        const padName = student.name.padEnd(19);
+        const scoresStr = `[${student.scores.join(", ")}]`.padEnd(15);
+        
+        console.log(`${padId} | ${padName} | ${scoresStr} | ${avg}`);
+    }
+    console.log("------------------------------------------------------------------");
+}
+
+// 3. Calculate Average Score for a Specific Student
+function showSpecificAverage() {
+    if (students.length === 0) {
+        console.log("No student records found.");
+        return;
+    }
+
+    const searchId = readlineSync.questionInt("Enter student ID: ");
+    let foundStudent = null;
+
+    // Linear search traversal to find the student object match
+    for (let i = 0; i < students.length; i++) {
+        if (students[i].id === searchId) {
+            foundStudent = students[i];
+            break;
+        }
+    }
+
+    if (foundStudent === null) {
+        console.log(`Error: Student ID ${searchId} not found.`);
+    } else {
+        const avg = calculateAverage(foundStudent.scores).toFixed(2);
+        console.log(`${foundStudent.name}'s average score: ${avg}`);
+    }
+}
+
+// main()
+// Coordinates menu printing, input routing, and execution life cycle management.
+function main() {
+    let running = true;
+
+    while (running) {
+        console.log("\n================================");
+        console.log("   STUDENT RECORD SYSTEM MENU   ");
+        console.log("================================");
+        console.log("1. Add student");
+        console.log("2. Display all students");
+        console.log("3. Calculate average score");
+        console.log("4. Quit");
+
+        const choice = readlineSync.questionInt("Enter your choice (1-4): ");
+
+        switch (choice) {
+            case 1:
+                addStudent();
+                break;
+            case 2:
+                displayAllStudents();
+                break;
+            case 3:
+                showSpecificAverage();
+                break;
+            case 4:
+                console.log("Goodbye!");
+                running = false;
+                break;
+            default:
+                console.log("Error: Please select a valid option from 1 to 4.");
+                break;
+        }
+    }
+}
+
+
+
+main();
+

@@ -74,4 +74,116 @@
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
 
+const readlineSync = require('readline-sync');
 
+// 1. Addition
+function add(num1, num2) {
+    return num1 + num2;
+}
+
+// 2. Subtraction
+function subtract(num1, num2) {
+    return num1 - num2;
+}
+
+// 3. Multiplication
+function multiply(num1, num2) {
+    return num1 * num2;
+}
+
+// 4. Division
+function divide(num1, num2) {
+    if (num2 === 0) {
+        return null; // Return null to signal division error to main
+    }
+    return num1 / num2;
+}
+
+// 5. Modulus
+function modulus(num1, num2) {
+    if (num2 === 0) {
+        return null; // Return null to signal modulus by zero error to main
+    }
+    return num1 % num2;
+}
+
+// 6. Exponentiation
+function power(num1, num2) {
+    return num1 ** num2;
+}
+
+// main()
+// Coordinates menu loop, inputs, operations execution, and formatting
+function main() {
+    let running = true;
+
+    while (running) {
+        console.log("\n============================");
+        console.log("     SIMPLE CALCULATOR      ");
+        console.log("============================");
+        console.log("1. Addition");
+        console.log("2. Subtraction");
+        console.log("3. Multiplication");
+        console.log("4. Division");
+        console.log("5. Modulus");
+        console.log("6. Exponentiation");
+        console.log("7. Quit");
+
+        const choice = readlineSync.questionInt("Select an operation (1-7): ");
+
+        // Validate option quickly before asking for numeric operands
+        if (choice === 7) {
+            console.log("Goodbye!");
+            running = false;
+            continue;
+        }
+
+        if (choice < 1 || choice > 7) {
+            console.log("Error: Please select a valid option from 1 to 7.");
+            continue;
+        }
+
+        // Collect calculations operands using questionFloat for generic decimal support
+        const firstNum = readlineSync.questionFloat("Enter first number : ");
+        const secondNum = readlineSync.questionFloat("Enter second number: ");
+        let result;
+
+        switch (choice) {
+            case 1:
+                result = add(firstNum, secondNum);
+                console.log(`Result: ${firstNum} + ${secondNum} = ${result.toFixed(2)}`);
+                break;
+            case 2:
+                result = subtract(firstNum, secondNum);
+                console.log(`Result: ${firstNum} - ${secondNum} = ${result.toFixed(2)}`);
+                break;
+            case 3:
+                result = multiply(firstNum, secondNum);
+                console.log(`Result: ${firstNum} * ${secondNum} = ${result.toFixed(2)}`);
+                break;
+            case 4:
+                result = divide(firstNum, secondNum);
+                if (result === null) {
+                    console.log("Error: Cannot divide by zero.");
+                } else {
+                    console.log(`Result: ${firstNum} / ${secondNum} = ${result.toFixed(2)}`);
+                }
+                break;
+            case 5:
+                result = modulus(firstNum, secondNum);
+                if (result === null) {
+                    console.log("Error: Cannot divide by zero.");
+                } else {
+                    console.log(`Result: ${firstNum} % ${secondNum} = ${result.toFixed(2)}`);
+                }
+                break;
+            case 6:
+                result = power(firstNum, secondNum);
+                console.log(`Result: ${firstNum} ** ${secondNum} = ${result.toFixed(2)}`);
+                break;
+        }
+    }
+}
+
+
+main();

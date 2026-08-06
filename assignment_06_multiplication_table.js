@@ -59,4 +59,64 @@
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
 
+const readlineSync = require('readline-sync');
+
+// PART A: Print a single multiplication table for a number from 1 to 12
+function printSingleTable(num) {
+    if (num <= 0) {
+        console.log("Error: Number must be a positive integer.");
+        return;
+    }
+
+    console.log(`\nMultiplication Table for ${num}:`);
+    for (let i = 1; i <= 12; i++) {
+        // String padding keeps layout clean when numbers cross into double digits
+        let multi = i.toString().padEnd(2);
+        console.log(`${num}  x  ${multi} =  ${num * i}`);
+    }
+}
+
+// PART B: Print all multiplication tables from 1 up to N
+function printMultipleTables(maxNum) {
+    if (maxNum <= 0) {
+        console.log("Error: Number must be a positive integer.");
+        return;
+    }
+
+    for (let currentNum = 1; currentNum <= maxNum; currentNum++) {
+        printSingleTable(currentNum);
+        
+        // Add a clean dividing border between adjacent blocks (except after the last table)
+        if (currentNum < maxNum) {
+            console.log("---------------------------");
+        }
+    }
+}
+
+// main()
+// Coordinates terminal input collection and error mitigation workflows.
+function main() {
+    console.log("=== MULTIPLICATION TABLE GENERATOR ===");
+
+    // Execute Part A
+    console.log("\n--- Part A: Single Table ---");
+    const singleNum = readlineSync.questionInt("Enter a number: ");
+    if (singleNum <= 0) {
+        console.log("Error: Number must be a positive integer.");
+        return; // Guard clause stops further program execution
+    }
+    printSingleTable(singleNum);
+
+    // Execute Part B
+    console.log("\n--- Part B: Tables from 1 to N ---");
+    const limitNum = readlineSync.questionInt("Enter a number N: ");
+    if (limitNum <= 0) {
+        console.log("Error: Number must be a positive integer.");
+        return; // Guard clause stops further program execution
+    }
+    printMultipleTables(limitNum);
+}
+
+
+main();
 
